@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devrobot.springbootecommerce.model.Flight;
-import com.devrobot.springbootecommerce.repository.FlightRepository;
+import com.devrobot.springbootecommerce.service.FlightService;
 
 
 
@@ -23,37 +23,37 @@ import com.devrobot.springbootecommerce.repository.FlightRepository;
 public class FlightController {
     
     @Autowired
-    private FlightRepository flightRepository;
+    private FlightService flightService;
 
     @PostMapping(value="/")
     public Flight persist(@RequestBody Flight flight){ 
-        flightRepository.save(flight); 
-        return flightRepository.findById(flight.getFlightid()).get(); 
+        flightService.save(flight); 
+        return flightService.findById(flight.getFlightid()).get(); 
     }
 
     @GetMapping(value="/")
     public List<Flight> getAll(){
-        return flightRepository.findAll();
+        return flightService.findAll();
     }
 
     @GetMapping(value="/{flightid}")
     public Flight get(@RequestParam("flightid") String flightid){
-        return flightRepository.findById(flightid).get();
+        return flightService.findById(flightid).get();
     }
 
     @PutMapping(value = "/{flightid}") 
     public List<Flight> put(@PathVariable String flightid,@RequestBody Flight flight){
-        if (flightRepository.existsById(flightid)) {
-			flightRepository.deleteById(flightid);
-			flightRepository.save(flight);
+        if (flightService.existsById(flightid)) {
+			flightService.deleteById(flightid);
+			flightService.save(flight);
 		}
-		return flightRepository.findAll();
+		return flightService.findAll();
     }  
 
     @DeleteMapping(value="/{flightid}")
     public List<Flight> delete(@PathVariable String flightid){
-        flightRepository.deleteById(flightid);
-        return flightRepository.findAll();
+        flightService.deleteById(flightid);
+        return flightService.findAll();
     }
 }
 
