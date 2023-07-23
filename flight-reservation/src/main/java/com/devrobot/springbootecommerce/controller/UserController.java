@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devrobot.springbootecommerce.model.User;
-import com.devrobot.springbootecommerce.repository.UserRepository;
-
+import com.devrobot.springbootecommerce.service.UserService;
 
 
 @RestController
@@ -23,37 +22,38 @@ import com.devrobot.springbootecommerce.repository.UserRepository;
 public class UserController {
     
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
     @PostMapping(value="/")
     public User persist(@RequestBody User user){
-         userRepository.save(user);
-         return userRepository.findById(user.getUserid()).get(); 
+        userService.save(user);
+        return userService.findById(user.getUserid()).get(); 
     }
     @GetMapping(value="/")
     public List<User> getAll(){
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     @GetMapping(value="/{userid}")
     public User get(@RequestParam("userid") String userid){
-        return userRepository.findById(userid).get();
+        return userService.findById(userid).get();
     }
 
 
     @PutMapping(value="/{userid}")
     public List<User> put(@PathVariable String userid,@RequestBody User user){
-        if (userRepository.existsById(userid)) {
-			userRepository.deleteById(userid);
-			userRepository.save(user);
+        if (userService.existsById(userid)) {
+			userService.deleteById(userid);
+			userService.save(user);
 		}
-		return userRepository.findAll();
+		return userService.findAll();
     }
 
 
     @DeleteMapping(value="/{userid}")
     public List<User> delete(@PathVariable String userid){
-        userRepository.deleteById(userid);
-        return userRepository.findAll();
+        userService.deleteById(userid);
+        return userService.findAll();
     }
 
 }
