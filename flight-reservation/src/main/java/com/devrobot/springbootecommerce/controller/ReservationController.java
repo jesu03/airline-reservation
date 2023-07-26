@@ -14,45 +14,45 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devrobot.springbootecommerce.model.Reservation;
-import com.devrobot.springbootecommerce.repository.ReservationRepository;
+import com.devrobot.springbootecommerce.service.ReservationService;
 
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
     
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationService reservationService;
 
     @PostMapping(value="/")
     public Reservation persist(@RequestBody Reservation reservation){
-        reservationRepository.save(reservation);
-        return reservationRepository.findById(reservation.getReservationid()).get();
+        reservationService.save(reservation);
+        return reservationService.findById(reservation.getReservationid()).get();
     }
 
     @GetMapping(value="/")
     public List<Reservation> getAll(){
-        return reservationRepository.findAll();
+        return reservationService.findAll();
     }
 
     @GetMapping(value="/{reservationid}")
     public Reservation get(@RequestParam("reservationid") String reservationid){
-            return reservationRepository.findById(reservationid).get();
+            return reservationService.findById(reservationid).get();
     }
 
 
     @PutMapping(value="/{reservationid}")
     public List<Reservation> put(@PathVariable String reservationid,@RequestBody Reservation reservation){
-        if(reservationRepository.existsById(reservationid)){
-            reservationRepository.deleteById(reservationid);
-            reservationRepository.save(reservation);
+        if(reservationService.existsById(reservationid)){
+            reservationService.deleteById(reservationid);
+            reservationService.save(reservation);
         }
-        return reservationRepository.findAll();
+        return reservationService.findAll();
     }
 
     @DeleteMapping(value="/{reservationid}")
     public List<Reservation> delete(@PathVariable String reservationid){
-        reservationRepository.deleteById(reservationid);
-        return reservationRepository.findAll();
+        reservationService.deleteById(reservationid);
+        return reservationService.findAll();
     }
 
 }
